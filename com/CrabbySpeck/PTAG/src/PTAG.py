@@ -1,10 +1,14 @@
+#Custom made modules
 import Music	#This is where all of the multi-threaded music is.
 import PythonGameLib	#This is where we can see a formatted list of all of the player's statistics.
+
+#Built-in Libraries
 import time	#Allows us to add pauses between events.
+import sys
 
+#Game Libraries
 import pyglet	#This is the general game library
-
-
+#Extra Functions/Classes from Game Library
 from pyglet.window import key	#Allows us to have keyboard input
 from pyglet.window import mouse		#Allows us to have mouse input
 
@@ -79,10 +83,15 @@ playerHealthLabel = pyglet.text.Label(PTAGVars.playerHealth, font_name='Times Ne
 playerResistanceLabel = pyglet.text.Label(PTAGVars.playerResistance, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-30), anchor_x='right', anchor_y='top')
 playerArmourLabel = pyglet.text.Label(PTAGVars.playerArmour, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-45), anchor_x='right', anchor_y='top')
 playerLocationLabel = pyglet.text.Label(PTAGVars.playerLocation, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-60), anchor_x='right', anchor_y='top')
-missionObjectiveLabel = pyglet.text.Label(PTAGVars.missionObjective, font_name='Arial Rounded MT Bold', font_size=30, x=window.width//2 ,y=460, anchor_x='center', anchor_y='top')
+missionObjectiveLabel = pyglet.text.Label(PTAGVars.missionObjective, font_name='Arial Rounded MT Bold', font_size=20, x=window.width//2 ,y=460, anchor_x='center', anchor_y='top')
 storyLabel = pyglet.text.Label(PTAGVars.story, font_name='Arial', font_size=15, x=window.width//2, y=window.height//2, anchor_x='center', anchor_y='center')
 
+#Buttons
+#Look Around Button
 LookAroundButtonLabel = pyglet.text.Label('Look Around', font_name='Times New Roman', font_size=10, x=10, y=30, anchor_x='left', anchor_y='center')
+def lookAround():
+	if True:
+		print()
 
 
 @window.event
@@ -135,5 +144,6 @@ def on_draw():
 	
 	
 pyglet.app.run()
+sys.exit(0)
 
 #Run code that is supposed to happen after the main game window is closed. 
