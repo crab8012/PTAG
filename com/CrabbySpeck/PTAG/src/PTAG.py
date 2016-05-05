@@ -1,5 +1,4 @@
 #Custom made modules
-import Music	#This is where all of the multi-threaded music is.
 import PythonGameLib	#This is where we can see a formatted list of all of the player's statistics.
 
 #Built-in Libraries
@@ -23,10 +22,12 @@ class PTAGVars():
 	playerArmour = 'Player Armour: ' + str(player[3])
 	playerLocation = 'Location: ' + str(player[4])
 	missionObjective = 'Play the Game!'
-	story = 'Hello. \n Spencer Said Hello. \n So does Jordan'
+	mouseCoords = (0, 0)
 
 	stringPlayerStatisticsList = [player[0], playerHealth, playerResistance, playerArmour, playerLocation]
-	
+	#Fonts
+	hemiHead = '../assets/fonts/hemi head bd it.ttf'
+	#Music
 	wizardsBattleSong = '../assets/music/Final Battle of the Dark Wizards.mp3'
 	floatingCitiesSong = '../assets/music/Floating Cities.mp3'
 	rynosThemeSong = '../assets/music/Rynos_Theme.mp3'
@@ -68,30 +69,60 @@ class newGame():
 newGame.selectDLL()
 newGame.setupPlayer()
 #Play the music
-sound = pyglet.media.load(PTAGVars.clashDefiantSong)
+sound = pyglet.media.load(PTAGVars.professorUmlautSong)
 sound.play()
 #Define the main window
 window = pyglet.window.Window()
 
-#Game Name and Start Button Labels
-GameTitle = pyglet.text.Label("Python Text Adventure Game", font_name='Times New Roman', font_size=25, x=window.width//2, y=window.width//2, anchor_x='center', anchor_y='center', color=(255,0,0,255))
-StartLabel = pyglet.text.Label("Click to Start", font_name='Times New Roman', font_size=15, x=(window.width//2)-20, y=(window.width//2)-100, anchor_x='center', anchor_y='center')
-
-#Player Statistics Labels
-playerNameLabel = pyglet.text.Label(PTAGVars.player[0], font_name='Times New Roman', font_size=10, x=window.width, y=window.height, anchor_x='right', anchor_y='top')
-playerHealthLabel = pyglet.text.Label(PTAGVars.playerHealth, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-15), anchor_x='right', anchor_y='top')
-playerResistanceLabel = pyglet.text.Label(PTAGVars.playerResistance, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-30), anchor_x='right', anchor_y='top')
-playerArmourLabel = pyglet.text.Label(PTAGVars.playerArmour, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-45), anchor_x='right', anchor_y='top')
-playerLocationLabel = pyglet.text.Label(PTAGVars.playerLocation, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-60), anchor_x='right', anchor_y='top')
-missionObjectiveLabel = pyglet.text.Label(PTAGVars.missionObjective, font_name='Arial Rounded MT Bold', font_size=20, x=window.width//2 ,y=460, anchor_x='center', anchor_y='top')
-storyLabel = pyglet.text.Label(PTAGVars.story, font_name='Arial', font_size=15, x=window.width//2, y=window.height//2, anchor_x='center', anchor_y='center')
-
-#Buttons
-#Look Around Button
-LookAroundButtonLabel = pyglet.text.Label('Look Around', font_name='Times New Roman', font_size=10, x=10, y=30, anchor_x='left', anchor_y='center')
-def lookAround():
-	if True:
-		print()
+class LabelsAndButtons():
+	#Game Name and Start Button Labels
+	GameTitle = pyglet.text.Label("Python Text Adventure Game", font_name='Times New Roman', font_size=25, x=window.width//2, y=window.width//2, anchor_x='center', anchor_y='center', color=(255,0,0,255))
+	StartLabel = pyglet.text.Label("Click to Start", font_name='Times New Roman', font_size=15, x=(window.width//2)-20, y=(window.width//2)-100, anchor_x='center', anchor_y='center')
+	
+	#Player Statistics
+	playerNameLabel = pyglet.text.Label(PTAGVars.player[0], font_name='Times New Roman', font_size=10, x=window.width, y=window.height, anchor_x='right', anchor_y='top')
+	playerHealthLabel = pyglet.text.Label(PTAGVars.playerHealth, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-15), anchor_x='right', anchor_y='top')
+	playerResistanceLabel = pyglet.text.Label(PTAGVars.playerResistance, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-30), anchor_x='right', anchor_y='top')
+	playerArmourLabel = pyglet.text.Label(PTAGVars.playerArmour, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-45), anchor_x='right', anchor_y='top')
+	playerLocationLabel = pyglet.text.Label(PTAGVars.playerLocation, font_name='Times New Roman', font_size=10, x=window.width, y=(window.height-60), anchor_x='right', anchor_y='top')
+	
+	#General Game Information Labels
+	missionObjectiveLabel = pyglet.text.Label(PTAGVars.missionObjective, font_name='Arial Rounded MT Bold', font_size=10, x=window.width//2 ,y=0, anchor_x='center', anchor_y='bottom')
+	storyLabel = pyglet.text.Label('The story here gets updated, like subtitles, with the voice.', font_name='Arial', font_size=10, x=window.width//2, y=window.height//2, anchor_x='center', anchor_y='center')
+	speaker = pyglet.image.load('../assets/images/Speaker.png')
+	
+	#Debug Labels
+	pointerClickLocation = pyglet.text.Label('0, 0', font_name='Arial', font_size=10, x=window.width, y=0, anchor_x='right', anchor_y='bottom')
+	fps = pyglet.clock.ClockDisplay()
+	
+	#Buttons
+	#Look Around Button
+	LookAroundButtonLabel = pyglet.text.Label('Look Around', font_name='Times New Roman', font_size=10, x=10, y=300, anchor_x='left', anchor_y='center')
+	def lookAround():
+		pointer = PTAGVars.mouseCoords
+		#Button Bounds:
+		bounds = (10, 305, 89, 295)#Top Left, Bottom Right
+		if pointer[0] <= bounds[2] and pointer[0] >= bounds[0] and pointer[1] <= bounds[1] and pointer[1] >= bounds[3]:
+			print(True)
+	#Listen Closely Button
+	ListenCloselyLabel = pyglet.text.Label('Listen Closely', font_name='Times New Roman', font_size=10, x=10, y=285, anchor_x='left', anchor_y='center')
+	
+def storyNarration():
+	storyLabel.text='You begin awaking in a room.'
+	storyLabel.draw()
+	time.sleep(1)
+	storyLabel.text='It is not your room.'
+	storyLabel.draw()
+	time.sleep(1)
+	storyLabel.text='The room is stone cold.'
+	storyLabel.draw()
+	time.sleep(1)
+	storyLabel.text='There are no lights.'
+	storyLabel.draw()
+	time.sleep(1)
+	storyLabel.text='You have to escape.'
+	storyLabel.draw()
+	time.sleep(1)
 
 
 @window.event
@@ -100,18 +131,17 @@ def on_key_press(symbol, modifiers):
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):
-	print(x, y)
 	pressToStart()
-	LeButtonOne(x, y)
-
+	PTAGVars.mouseCoords = (x, y)
+	LabelsAndButtons.lookAround()
 def pressToStart():
 	if not PTAGVars.started:
-		StartLabel.text=''
+		LabelsAndButtons.StartLabel.text=''
 		moveTitleUp()
 		PTAGVars.started = True
 		print("DEBUG: PTAGVars.started = ", PTAGVars.started)
-		
-		#StoryLine()
+		#storyNarration()
+
 	else:
 		PTAGVars.started = True
 
@@ -121,6 +151,7 @@ def LeButtonOne(x, y):
 		print('', end='')
 
 def moveTitleUp():
+	GameTitle = LabelsAndButtons.GameTitle
 	GameTitle.font_size=10
 	GameTitle.y=480
 	GameTitle.anchor_y='top'
@@ -130,17 +161,29 @@ def playerStatistics():
 
 @window.event
 def on_draw():
-	window.clear()
-	GameTitle.draw()
-	StartLabel.draw()
-	playerNameLabel.draw()
-	playerHealthLabel.draw()
-	playerResistanceLabel.draw()
-	playerArmourLabel.draw()
-	playerLocationLabel.draw()
-	LookAroundButtonLabel.draw()
-	missionObjectiveLabel.draw()
-	storyLabel.draw()
+	b = LabelsAndButtons()
+	window.clear()#	Clear the display
+	
+	#	Draw the Game Infomation Labels
+	b.GameTitle.draw()
+	b.missionObjectiveLabel.draw()
+	b.storyLabel.draw()
+	
+	#	Draw the Game Button Labels
+	b.StartLabel.draw()
+	b.LookAroundButtonLabel.draw()
+	b.ListenCloselyLabel.draw()
+	
+	#	Draw the Player Statistics Labels
+	b.playerNameLabel.draw()
+	b.playerHealthLabel.draw()
+	b.playerResistanceLabel.draw()
+	b.playerArmourLabel.draw()
+	b.playerLocationLabel.draw()
+	
+	#	Draw the Game Debugging Labels
+	b.pointerClickLocation.draw()
+	b.fps.draw()
 	
 	
 pyglet.app.run()
