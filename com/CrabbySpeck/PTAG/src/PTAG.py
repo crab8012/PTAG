@@ -15,7 +15,7 @@ class PTAGVars():
 	
 	#Global Variables
 	playerInventory = []
-	player = ['player', 10, False, 10, (0, 0)]
+	player = ['player', 10, False, 10, (1, 1)]
 	started = False
 	playerHealth = 'Player Health: ' + str(player[1])
 	playerResistance = 'Resistance: ' + str(player[2])
@@ -95,6 +95,10 @@ class LabelsAndButtons():
 	pointerClickLocation = pyglet.text.Label('0, 0', font_name='Arial', font_size=10, x=window.width, y=0, anchor_x='right', anchor_y='bottom')
 	fps = pyglet.clock.ClockDisplay()
 	
+	def inBounds(bounds, pointer):
+		if pointer[0] <= bounds[2] and pointer[0] >= bounds[0] and pointer[1] <= bounds[1] and pointer[1] >= bounds[3]:
+			return(True)
+	
 	#Buttons
 	#Look Around Button
 	LookAroundButtonLabel = pyglet.text.Label('Look Around', font_name='Times New Roman', font_size=10, x=10, y=300, anchor_x='left', anchor_y='center')
@@ -102,27 +106,35 @@ class LabelsAndButtons():
 		pointer = PTAGVars.mouseCoords
 		#Button Bounds:
 		bounds = (10, 305, 89, 295)#Top Left, Bottom Right
-		if pointer[0] <= bounds[2] and pointer[0] >= bounds[0] and pointer[1] <= bounds[1] and pointer[1] >= bounds[3]:
-			print(True)
+		if LabelsAndButtons.inBounds(bounds, pointer):
+			print("There is not much to see here")
+		
 	#Listen Closely Button
 	ListenCloselyLabel = pyglet.text.Label('Listen Closely', font_name='Times New Roman', font_size=10, x=10, y=285, anchor_x='left', anchor_y='center')
+	def listenClosely():
+		pointer = PTAGVars.mouseCoords
+		#Button Bounds
+		bounds = (9, 290, 89, 280)
+		if LabelsAndButtons.inBounds(bounds, pointer):
+			print("You hear muffled noises that could be voices or music.")
+	
+	#Feel Around Button
+	FeelAroundLabel = pyglet.text.Label('Feel Around', font_name='Times New Roman', font_size=10, x=10, y=270, anchor_x='left', anchor_y='center')
+	def feelAround():
+		pointer = PTAGVars.mouseCoords
+		#Button Bounds
+		bounds = (9, 275, 89, 265)
+		if LabelsAndButtons.inBounds(bounds, pointer):
+			print('hi')
+		 
 	
 def storyNarration():
-	storyLabel.text='You begin awaking in a room.'
-	storyLabel.draw()
-	time.sleep(1)
-	storyLabel.text='It is not your room.'
-	storyLabel.draw()
-	time.sleep(1)
-	storyLabel.text='The room is stone cold.'
-	storyLabel.draw()
-	time.sleep(1)
-	storyLabel.text='There are no lights.'
-	storyLabel.draw()
-	time.sleep(1)
-	storyLabel.text='You have to escape.'
-	storyLabel.draw()
-	time.sleep(1)
+	print('You begin awaking in a room.')
+	print('It is not your room.')
+	print('The room is stone cold.')
+	print('There are no lights.')
+	print('You have to escape.')
+
 
 
 @window.event
@@ -134,13 +146,18 @@ def on_mouse_press(x, y, button, modifiers):
 	pressToStart()
 	PTAGVars.mouseCoords = (x, y)
 	LabelsAndButtons.lookAround()
+	LabelsAndButtons.listenClosely()
+	LabelsAndButtons.feelAround()
+	loc = [str(x), str(y)]
+	pointerLoc = ','.join(loc)
+	LabelsAndButtons.pointerClickLocation.text=pointerLoc
 def pressToStart():
 	if not PTAGVars.started:
 		LabelsAndButtons.StartLabel.text=''
 		moveTitleUp()
 		PTAGVars.started = True
 		print("DEBUG: PTAGVars.started = ", PTAGVars.started)
-		#storyNarration()
+		storyNarration()
 
 	else:
 		PTAGVars.started = True
@@ -155,10 +172,7 @@ def moveTitleUp():
 	GameTitle.font_size=10
 	GameTitle.y=480
 	GameTitle.anchor_y='top'
-	    
-def playerStatistics():
-	print('')
-
+	
 @window.event
 def on_draw():
 	b = LabelsAndButtons()
@@ -173,6 +187,7 @@ def on_draw():
 	b.StartLabel.draw()
 	b.LookAroundButtonLabel.draw()
 	b.ListenCloselyLabel.draw()
+	b.FeelAroundLabel.draw()
 	
 	#	Draw the Player Statistics Labels
 	b.playerNameLabel.draw()
