@@ -107,6 +107,7 @@ class LabelsAndButtons():
 		#Button Bounds:
 		bounds = (10, 305, 89, 295)#Top Left, Bottom Right
 		if LabelsAndButtons.inBounds(bounds, pointer):
+			LabelsAndButtons.storyLabel.text='There is not much to see here'
 			print("There is not much to see here")
 		
 	#Listen Closely Button
@@ -117,6 +118,7 @@ class LabelsAndButtons():
 		bounds = (9, 290, 89, 280)
 		if LabelsAndButtons.inBounds(bounds, pointer):
 			print("You hear muffled noises that could be voices or music.")
+			LabelsAndButtons.storyLabel.text='You hear muffled noises that could be voices or music'
 	
 	#Feel Around Button
 	FeelAroundLabel = pyglet.text.Label('Feel Around', font_name='Times New Roman', font_size=10, x=10, y=270, anchor_x='left', anchor_y='center')
@@ -125,7 +127,11 @@ class LabelsAndButtons():
 		#Button Bounds
 		bounds = (9, 275, 89, 265)
 		if LabelsAndButtons.inBounds(bounds, pointer):
-			print('hi')
+			LabelsAndButtons.storyLabel.text='You find a door and a loose stone.'
+			print('You find a door and a loose stone.')
+	
+	#Try Door Button
+	TryDoorLabel = 
 		 
 	
 def storyNarration():
