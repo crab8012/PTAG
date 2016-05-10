@@ -36,8 +36,7 @@ class Weapons():
 		health = enemy[2]
 		esistance = enemy[3]
 		armour = enemy[4]
-		durability = name
-		
+		durability = name		
 class Inventory():
 	def findInInventory(inventory, searchItem):
 		itemIndex = inventory.index(searchItem)
@@ -79,7 +78,6 @@ class Inventory():
 		#Item Three
 		print(inv[2][0], end='\t')
 		print(inv[2][1], end='\n')
-
 class Damages():	
 	def entityDamage(health, armour, resistance, takenDamage):
 		newHealth = 0
@@ -90,25 +88,20 @@ class Damages():
 		else:
 			newHealth = health - takenDamage
 					
-		return(newHealth)
-	
+		return(newHealth)	
 	def RandomDamage(a, b):
 		random.randrange(a, b)
-
 	def isDead(health):
 		if health <=0:
 			return(True)
 		else:
-			return(False)
-			
+			return(False)		
 class SaveLoadGame():
-	print()
-			
+	print()			
 class PythonGameAudio():
 	def winsoundPlayMusic(song):
 		winsound.PlaySound(song, winsound.SND_FILENAME)
-		print("Playing Music")		
-
+		print("Playing Music")
 class Player():
 	def listStats(player):
 		strStats = PTAGVars.stringPlayerStatisticsList
@@ -122,3 +115,9 @@ class Player():
 		resistance.text=strStats[2]
 		armour.text=strStats[3]
 		location.text=strStats[4]
+class General():
+	def inBounds(bounds, pointer):
+		if pointer[0] <= bounds[2] and pointer[0] >= bounds[0] and pointer[1] <= bounds[1] and pointer[1] >= bounds[3]:
+			return(True)
+		else:
+			return(False)
