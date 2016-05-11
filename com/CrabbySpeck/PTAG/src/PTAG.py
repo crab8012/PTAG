@@ -55,7 +55,7 @@ class PTAGVars():
 	missionObjective = 'Escape The Room'
 	mouseCoords = (0, 0)
 	fs = False
-	level=1
+	level=0
 
 	found_Stone=False
 	doorUnlocked=False
@@ -194,20 +194,28 @@ class RoomOne():
 		if PTAGVars.found_Stone:
 			RoomOne.TryDoorLabel.draw()
 			RoomOne.TryStoneLabel.draw()
+class RoomOne_ReturnOne():
+	LeaveRoomButton = pyglet.text.Label('Leave Room', font_name='Times New Roman', font_size=10, x=10, y=100, anchor_x='left', anchor_y='center')
+	def LeaveRoom():
+		PTAGVars.level=10
+	def DrawRoomOne():
+		RoomOne_ReturnOne.LeaveRoomButton()
 class HallOne():
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
 	
 	#Buttons
 	#Look Around Button
-	LookAroundButtonLabel = pyglet.text.Label('Look Around', font_name=font, font_size=10, x=10, y=300, anchor_x='left', anchor_y='center')
+	GoBackButtonLabel = pyglet.text.Label('Go back inside the room', font_name=font, font_size=10, x=10, y=300, anchor_x='left', anchor_y='center')
 	def lookAround():
 		pointer = PTAGVars.mouseCoords
 		#Button Bounds:
 		bounds = (10, 305, 89, 295)#Top Left, Bottom Right
 		if inBounds(bounds, pointer):
-			LabelsGeneral.storyLabel.text='There is not much to see here'
-			print("There is not much to see here")
+			LabelsGeneral.storyLabel.text='You have been here before. There is nothing to see here'
+			print("You have been here before. There is nothing to see here")
+			PTAGVars.level=1
+			
 		
 	#Listen Closely Button
 	ListenCloselyLabel = pyglet.text.Label('Listen Closely', font_name=font, font_size=10, x=10, y=285, anchor_x='left', anchor_y='center')
@@ -327,7 +335,7 @@ def on_mouse_press(x, y, button, modifiers):
 	PTAGVars.mouseCoords = (x, y)
 	Level=PTAGVars.level
 	
-	if Level==1:
+	if Level==0:
 		RoomOne.listenClosely()
 		RoomOne.lookAround()
 		if not PTAGVars.found_Stone:
@@ -335,12 +343,15 @@ def on_mouse_press(x, y, button, modifiers):
 		if PTAGVars.found_Stone:
 			RoomOne.tryDoor()
 			RoomOne.tryStone()
+	elif Level==1:
+		RoomOne_ReturnOne.LeaveRoom()
 		
 	loc = [str(x), str(y)]
 	pointerLoc = ','.join(loc)
 	DebugStuffs.pointerClickLocation.text=pointerLoc	
 @window.event
 def on_draw():
+	level = PTAGVars.level
 	window.clear()#	Clear the display
 	#	Draw the Game Infomation Labels
 	LabelsGeneral.DrawGeneralLabels()
@@ -349,7 +360,11 @@ def on_draw():
 	#	Draw the Game Debugging Labels
 	if PTAGVars.DeBuG:
 		DebugStuffs.DrawDebugStuff()
-	#	Draw The Stuff for Room One
-	RoomOne.DrawRoomOne()
+	
+	if level==0:
+		#	Draw The Stuff for Room One
+		RoomOne.DrawRoomOne()
+	elif level==1:
+		RoomOne_ReturnOne.DrawRoomOne
 pyglet.app.run()
 sys.exit(0)
