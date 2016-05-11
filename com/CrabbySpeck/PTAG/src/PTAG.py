@@ -194,7 +194,7 @@ class RoomOne():
 		if PTAGVars.found_Stone:
 			RoomOne.TryDoorLabel.draw()
 			RoomOne.TryStoneLabel.draw()
-class RoomTwo():
+class HallOne():
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
 	
