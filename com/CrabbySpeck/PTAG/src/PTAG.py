@@ -9,6 +9,7 @@ import pyglet	#This is the general game library
 #Extra Functions/Classes from Game Library
 from pyglet.window import key	#Allows us to have keyboard input
 from pyglet.window import mouse		#Allows us to have mouse input
+from pyglet import font
 def storyNarration():
 	print('You begin awaking in a room.')
 	print('It is not your room.')
@@ -74,8 +75,11 @@ class PTAGVars():
 	furiousFreakSong = '../assets/music/Furious Freak.mp3'
 	overworldSong = '../assets/music/Overworld.mp3'
 	professorUmlautSong = '../assets/music/Professor Umlaut.mp3'
+	killersSong = '../assets/music/Killers.mp3'
+	sandStormRemixSong = '../assets/music/Daude - Sandstorm Jorxelvin Napalm Remix.mp3'
+	funLOTRSong = '../assets/music/taking the hobbits to isengard.mp3'
 	
-	song = [wizardsBattleSong, floatingCitiesSong, rynosThemeSong, clashDefiantSong, edmDetectionModeSong, furiousFreakSong, overworldSong, professorUmlautSong]
+	song = [wizardsBattleSong, floatingCitiesSong, rynosThemeSong, clashDefiantSong, edmDetectionModeSong, funLOTRSong, furiousFreakSong, overworldSong, professorUmlautSong, killersSong, sandStormRemixSong]
 class newGame():
 	def selectDLL():		
 		try:
@@ -91,9 +95,16 @@ class newGame():
 		player = PTAGVars.player
 		playerHealth = PTAGVars.playerHealth
 		playerName = str(input("What is your player's Name?\n"))
-		health = 10
-		resistance = False
-		armour = 10
+		godmode = playerName.lower()
+		if godmode == 'mcd':
+			health = 3807
+			resistance = True
+			armour = 3807
+			player[0] = playerName
+		else:
+			health = 10
+			resistance = False
+			armour = 10
 		player[0] = playerName
 		player[1] = health
 		player[2] = resistance
@@ -109,8 +120,14 @@ def inBounds(bounds, pointer):
 newGame.selectDLL()
 newGame.setupPlayer()
 #Play the music
-sound = pyglet.media.load(PTAGVars.song[0])
+lastIndex = len(PTAGVars.song)-1
+sound = pyglet.media.load(PTAGVars.song[random.randrange(0, lastIndex)])
 sound.play()
+
+
+#Define a folder for the custom fonts
+pyglet.font.add_directory('../assets/fonts/')
+
 #Define the main window
 window = pyglet.window.Window(caption='Python Text Adventure Game - Room 1.1 - Rv1')
 class RoomOne():
@@ -288,13 +305,12 @@ class LabelsGeneral():
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
 	#Game Name and Start Button Labels
-	GameTitle = pyglet.text.Label("Python Text Adventure Game", font_name=font, font_size=size, x=window.width//2, y=window.width//2, anchor_x='center', anchor_y='top', color=(255,0,0,255))
+	GameTitle = pyglet.text.Label("Python Text Adventure Game", font_name=font, font_size=14, x=window.width//2, y=window.width//2, anchor_x='center', anchor_y='top', color=(255,0,0,255))
 	StartLabel = pyglet.text.Label("Click to Start", font_name=font, font_size=size, x=(window.width//2)-20, y=(window.width//2)-100, anchor_x='center', anchor_y='center')
 	
 	#General Game Information Labels
 	missionObjectiveLabel = pyglet.text.Label(PTAGVars.missionObjective, font_name='Arial Rounded MT Bold', font_size=10, x=window.width//2 ,y=0, anchor_x='center', anchor_y='bottom')
 	storyLabel = pyglet.text.Label('', font_name='Arial', font_size=10, x=window.width//2, y=window.height//2, anchor_x='center', anchor_y='center')
-	speaker = pyglet.image.load('../assets/images/Speaker.png')
 	
 	def DrawGeneralLabels():
 		LabelsGeneral.GameTitle.draw()
