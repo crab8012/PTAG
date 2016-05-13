@@ -37,9 +37,13 @@ def moveTitleUp():
 	GameTitle.y=window.height
 	GameTitle.anchor_y='top'
 def endRoom():
+	level = PTAGVars.level
 	#Code goes here to switch to the next level
-	print('You have escaped 1-1')
-	LabelsGeneral.storyLabel.text='You have escaped 1-1'
+	if level == 0:
+		print('You have escaped 1-1')
+		LabelsGeneral.storyLabel.text='You have escaped 1-1'
+	
+	level = level + 10	
 class PTAGVars():
 	
 	#Tells Whether or not to print the Debug Information to the console or the screen
@@ -47,12 +51,13 @@ class PTAGVars():
 	
 	#Global Variables
 	playerInventory = []
-	player = ['player', 10, False, 10, (1, 1)]
+	player = ['player', 10, False, 10, (1, 1), 1]
 	started = False
 	playerHealth = 'Player Health: ' + str(player[1])
 	playerResistance = 'Resistance: ' + str(player[2])
 	playerArmour = 'Player Armour: ' + str(player[3])
 	playerLocation = 'Location: ' + str(player[4])
+	playerLevel = 'Player Level: ' + str(player[5])
 	missionObjective = 'Escape The Room'
 	mouseCoords = (0, 0)
 	fs = False
@@ -176,7 +181,8 @@ class RoomOne():
 			if PTAGVars.found_Key:
 				print("The door opens smoothly and quietly.")
 				LabelsGeneral.storyLabel.text='The door opens smoothly and quietly.'
-				endRoom()
+				print('You have escaped 1-1.')
+				PTAGVars.level=10
 			else:
 				print("The door is locked. You must find a key before it will open.")
 				LabelsGeneral.storyLabel.text='The door is locked. You must find a key before it will open.'
@@ -224,40 +230,18 @@ class HallOne():
 	#Buttons
 	#Look Around Button
 	GoBackButtonLabel = pyglet.text.Label('Go back inside the room', font_name=font, font_size=10, x=10, y=300, anchor_x='left', anchor_y='center')
-	def lookAround():
+	def goBack():
 		pointer = PTAGVars.mouseCoords
 		#Button Bounds:
 		bounds = (10, 305, 89, 295)#Top Left, Bottom Right
 		if inBounds(bounds, pointer):
+			PTAGVars.level = 1
 			LabelsGeneral.storyLabel.text='You have been here before. There is nothing to see here'
 			print("You have been here before. There is nothing to see here")
 			PTAGVars.level=1
-			
-		
-	#Listen Closely Button
-	ListenCloselyLabel = pyglet.text.Label('Listen Closely', font_name=font, font_size=10, x=10, y=285, anchor_x='left', anchor_y='center')
-	def listenClosely():
-		pointer = PTAGVars.mouseCoords
-		#Button Bounds
-		bounds = (9, 290, 89, 280)
-		if inBounds(bounds, pointer):
-			print("You hear muffled noises that could be voices or music.")
-			LabelsGeneral.storyLabel.text='You hear muffled noises that could be voices or music'
-	
-	#Feel Around Button
-	FeelAroundLabel = pyglet.text.Label('Feel Around', font_name=font, font_size=10, x=10, y=270, anchor_x='left', anchor_y='center')
-	def feelAround():
-		pointer = PTAGVars.mouseCoords
-		#Button Bounds
-		bounds = (9, 275, 89, 265)
-		if inBounds(bounds, pointer):
-			LabelsGeneral.storyLabel.text='You find a door and a loose stone.'
-			PTAGVars.found_Stone=True
-			print('You find a door and a loose stone.')
-	
 	#Try Door Button
-	TryDoorLabel = pyglet.text.Label('Try the door', font_name=font, font_size=10, x=10, y=270, anchor_x='left', anchor_y='center')
-	def tryDoor():
+	GoToIntersectionButton = pyglet.text.Label('Go to the intersection', font_name=font, font_size=10, x=10, y=270, anchor_x='left', anchor_y='center')
+	def goToIntersection():
 		pointer = PTAGVars.mouseCoords
 		#Button Bounds
 		bounds = (10, 275, 78, 266)
@@ -268,38 +252,10 @@ class HallOne():
 				endRoom()
 			else:
 				print("The door is locked. You must find a key before it will open.")
-				LabelsGeneral.storyLabel.text='The door is locked. You must find a key before it will open.'
-	
-	#Try Stone Button
-	TryStoneLabel = pyglet.text.Label('Look under the stone', font_name=font, font_size=size, x=100, y=270, anchor_x='left', anchor_y='center')
-	def tryStone():
-		pointer = PTAGVars.mouseCoords
-		#Button Bounds
-		bounds = (97, 275, 218, 266)
-		if inBounds(bounds, pointer):
-			print('Y1ou find a key underneath the stone. It might go to a door')
-			LabelsGeneral.storyLabel.text='You find a key underneath the stone. It might go to a door.'
-			PTAGVars.found_Key = True	
-	
-	def ButtonRoomOne():
-		RoomOne.listenClosely()
-		RoomOne.lookAround()
-				
-		if not PTAGVars.found_Stone:
-			RoomOne.feelAround()
-		if PTAGVars.found_Stone:
-			RoomOne.tryDoor()
-			RoomOne.tryStone()
-		
-	def DrawRoomOne():
-		RoomOne.LookAroundButtonLabel.draw()
-		RoomOne.ListenCloselyLabel.draw()
-		
-		if not PTAGVars.found_Stone:
-			RoomOne.FeelAroundLabel.draw()
-		if PTAGVars.found_Stone:
-			RoomOne.TryDoorLabel.draw()
-			RoomOne.TryStoneLabel.draw()
+				LabelsGeneral.storyLabel.text='The door is locked. You must find a key before it will open.'		
+	def DrawHallOne():
+		HallOne.GoBackButtonLabel.draw()
+		HallOne.GoToIntersectionButton.draw()
 
 class LabelsGeneral():	
 	font = PTAGVars.ButtonFont[0]
@@ -381,6 +337,9 @@ def on_draw():
 		#	Draw The Stuff for Room One
 		RoomOne.DrawRoomOne()
 	elif level==1:
-		RoomOne_ReturnOne.DrawRoomOne
+		RoomOne_ReturnOne.DrawRoomOne()
+	elif level==10:
+		HallOne.DrawHallOne()
+		
 pyglet.app.run()
 sys.exit(0)

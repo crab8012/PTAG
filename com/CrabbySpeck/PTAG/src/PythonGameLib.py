@@ -6,12 +6,14 @@ import PTAG
 class Weapons():
 	def weaponFist(enemy):
 		#enemy[name, damage, health, resistance buff, armour]
+		playerLevel = PTAGVars.player[5]
 		name = enemy[0]
 		damage = enemy[1]
 		health = enemy[2]
 		resistance = enemy[3]
 		armour = enemy[4]
 		print("You hit ", name, "with your fist")
+		givenDamage = randrange(0, 2)*playerLevel
 		enemy[2] = entityDamage(health, armour, resistance, givenDamage)
 		
 		return(enemy)
