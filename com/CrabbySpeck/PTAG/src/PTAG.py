@@ -128,13 +128,12 @@ newGame.setupPlayer()
 lastIndex = len(PTAGVars.song)-1
 sound = pyglet.media.load(PTAGVars.song[random.randrange(0, lastIndex)])
 sound.play()
-
-
 #Define a folder for the custom fonts
 pyglet.font.add_directory('../assets/fonts/')
-
 #Define the main window
 window = pyglet.window.Window(caption='Python Text Adventure Game - Room 1.1 - Rv1')
+#The different Levels
+#Room One
 class RoomOne():
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
@@ -159,7 +158,6 @@ class RoomOne():
 		if inBounds(bounds, pointer):
 			print("You hear muffled noises that could be voices or music.")
 			LabelsGeneral.storyLabel.text='You hear muffled noises that could be voices or music'
-	
 	#Feel Around Button
 	FeelAroundLabel = pyglet.text.Label('Feel Around', font_name=font, font_size=10, x=10, y=270, anchor_x='left', anchor_y='center')
 	def feelAround():
@@ -170,7 +168,6 @@ class RoomOne():
 			LabelsGeneral.storyLabel.text='You find a door and a loose stone.'
 			PTAGVars.found_Stone=True
 			print('You find a door and a loose stone.')
-	
 	#Try Door Button
 	TryDoorLabel = pyglet.text.Label('Try the door', font_name=font, font_size=10, x=10, y=270, anchor_x='left', anchor_y='center')
 	def tryDoor():
@@ -186,7 +183,6 @@ class RoomOne():
 			else:
 				print("The door is locked. You must find a key before it will open.")
 				LabelsGeneral.storyLabel.text='The door is locked. You must find a key before it will open.'
-	
 	#Try Stone Button
 	TryStoneLabel = pyglet.text.Label('Look under the stone', font_name=font, font_size=size, x=100, y=270, anchor_x='left', anchor_y='center')
 	def tryStone():
@@ -197,7 +193,6 @@ class RoomOne():
 			print('Y1ou find a key underneath the stone. It might go to a door')
 			LabelsGeneral.storyLabel.text='You find a key underneath the stone. It might go to a door.'
 			PTAGVars.found_Key = True	
-	
 	def ButtonRoomOne():
 		RoomOne.listenClosely()
 		RoomOne.lookAround()
@@ -206,8 +201,7 @@ class RoomOne():
 			RoomOne.feelAround()
 		if PTAGVars.found_Stone:
 			RoomOne.tryDoor()
-			RoomOne.tryStone()
-		
+			RoomOne.tryStone()	
 	def DrawRoomOne():
 		RoomOne.LookAroundButtonLabel.draw()
 		RoomOne.ListenCloselyLabel.draw()
@@ -220,9 +214,14 @@ class RoomOne():
 class RoomOne_ReturnOne():
 	LeaveRoomButton = pyglet.text.Label('Leave Room', font_name='Times New Roman', font_size=10, x=10, y=100, anchor_x='left', anchor_y='center')
 	def LeaveRoom():
-		PTAGVars.level=10
+		pointer = PTAGVars.mouseCoords
+		#Button Bounds:
+		bounds = (8, 107, 79, 96)#Top Left, Bottom Right
+		if inBounds(bounds, pointer):
+			PTAGVars.level=10
 	def DrawRoomOne():
-		RoomOne_ReturnOne.LeaveRoomButton()
+		RoomOne_ReturnOne.LeaveRoomButton.draw()
+#Hallway One
 class HallOne():
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
@@ -244,20 +243,35 @@ class HallOne():
 	def goToIntersection():
 		pointer = PTAGVars.mouseCoords
 		#Button Bounds
-		bounds = (10, 275, 78, 266)
+		bounds = (10, 275, 131, 265)
 		if inBounds(bounds, pointer):
-			if PTAGVars.found_Key:
-				print("The door opens smoothly and quietly.")
-				LabelsGeneral.storyLabel.text='The door opens smoothly and quietly.'
-				endRoom()
-			else:
-				print("The door is locked. You must find a key before it will open.")
-				LabelsGeneral.storyLabel.text='The door is locked. You must find a key before it will open.'		
+			print("You walk towads the intersection cautiously.")
+			LabelsGeneral.storyLabel.text='You walk towads the intersection cautiously.'
+			level=20
 	def DrawHallOne():
 		HallOne.GoBackButtonLabel.draw()
 		HallOne.GoToIntersectionButton.draw()
 
-class LabelsGeneral():	
+class HallTwo():
+	font = PTAGVars.ButtonFont[0]
+	size = PTAGVars.ButtonFont[1]
+	
+	RunLeftLabel = pyglet.text.Label('Run into the office to your left', font_name=font, font_size=size, x=10, y=270, anchor_x='left', anchor_y='center')
+	RunRightLabel = pyglet.text.Label('Run into the office to your right', font_name=font, font_size=size, x=10, y=285, anchor_x='left', anchor_y='center')
+	FightLabel = pyglet.text.Label('Defend yourself from the soldier', font_name=font, font_size=size, x=10, y=300, anchor_x='left', anchor_y='center')
+	
+	def fight():
+		Level=21
+	def runLeft():
+		print('You run into the office to your left.')
+	def runRight():
+		print('You run into the office to your right.')
+	def DrawHallTwo():
+		HallTwo.RunLeftLabel.draw()
+		HallTwo.RunRightLabel.draw()
+		HallTwo.FightLabel.draw()
+		
+class LabelsGeneral():
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
 	#Game Name and Start Button Labels
@@ -317,6 +331,11 @@ def on_mouse_press(x, y, button, modifiers):
 			RoomOne.tryStone()
 	elif Level==1:
 		RoomOne_ReturnOne.LeaveRoom()
+	elif Level==10:
+		HallOne.goToIntersection()
+		HallOne.goBack()
+	elif Level==20:
+		HallTwo.null
 		
 	loc = [str(x), str(y)]
 	pointerLoc = ','.join(loc)
@@ -340,6 +359,8 @@ def on_draw():
 		RoomOne_ReturnOne.DrawRoomOne()
 	elif level==10:
 		HallOne.DrawHallOne()
-		
+	elif level==20:
+		HallTwo.DrawHallTwo()
+	
 pyglet.app.run()
 sys.exit(0)
