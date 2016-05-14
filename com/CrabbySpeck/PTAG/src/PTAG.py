@@ -1,12 +1,8 @@
-#Custom made modules
 import PythonGameLib as pgl	#This is where we can see a formatted list of all of the player's statistics. We import it as pgl so we dont have to keep typing 'PythonGameLib._()'
 from PythonGameLib import *
-#Built-in Libraries
 import time	#Allows us to add pauses between events.
 import sys
-#Game Libraries
 import pyglet	#This is the general game library
-#Extra Functions/Classes from Game Library
 from pyglet.window import key	#Allows us to have keyboard input
 from pyglet.window import mouse		#Allows us to have mouse input
 def storyNarration():
@@ -163,7 +159,6 @@ class RoomOne():
 			else:
 				print("The door is locked. You must find a key before it will open.")
 				LabelsGeneral.storyLabel.text='The door is locked. You must find a key before it will open.'
-	
 	#Try Stone Button
 	TryStoneLabel = pyglet.text.Label('Look under the stone', font_name=font, font_size=size, x=100, y=270, anchor_x='left', anchor_y='center')
 	def tryStone():
@@ -174,7 +169,6 @@ class RoomOne():
 			print('Y1ou find a key underneath the stone. It might go to a door')
 			LabelsGeneral.storyLabel.text='You find a key underneath the stone. It might go to a door.'
 			PTAGVars.found_Key = True	
-	
 	def ButtonRoomOne():
 		RoomOne.listenClosely()
 		RoomOne.lookAround()
@@ -184,7 +178,6 @@ class RoomOne():
 		if PTAGVars.found_Stone:
 			RoomOne.tryDoor()
 			RoomOne.tryStone()
-		
 	def DrawRoomOne():
 		RoomOne.LookAroundButtonLabel.draw()
 		RoomOne.ListenCloselyLabel.draw()
@@ -283,7 +276,6 @@ class HallOne():
 		if PTAGVars.found_Stone:
 			RoomOne.TryDoorLabel.draw()
 			RoomOne.TryStoneLabel.draw()
-
 class LabelsGeneral():	
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
