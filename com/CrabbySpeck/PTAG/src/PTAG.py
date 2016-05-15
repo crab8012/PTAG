@@ -49,6 +49,10 @@ class PTAGVars():
 	#Tells Whether or not to print the Debug Information to the console or the screen
 	DeBuG = True	#	True means that the debug stuff is shown and false means that it isn't.
 	
+	#Name Creation Variables
+	NaMe = []
+	NAME = ''
+	
 	#Global Variables
 	playerInventory = []
 	player = ['player', 10, False, 10, (1, 1), 1]
@@ -66,6 +70,9 @@ class PTAGVars():
 	found_Stone=False
 	doorUnlocked=False
 	found_Key=False
+	
+	#Hidden Variables
+	keyPressCount = 0
 	
 	ButtonFont = ['Times New Roman', 10]
 	stringPlayerStatisticsList = [player[0], playerHealth, playerResistance, playerArmour, playerLocation]
@@ -91,7 +98,7 @@ class newGame():
 			pyglet.lib.load_library('avbin64')
 			pyglet.have_avbin=True
 			print("Using avbin64")
-		except OSError:
+		except:#OSError
 			pyglet.lib.load_library('avbin')
 			pyglet.have_avbin=True
 			print('Using avbin')
@@ -99,23 +106,18 @@ class newGame():
 	def setupPlayer():
 		player = PTAGVars.player
 		playerHealth = PTAGVars.playerHealth
-		playerName = str(input("What is your player's Name?\n"))
-		godmode = playerName.lower()
-		if godmode == 'mcd':
-			health = 3807
-			resistance = True
-			armour = 3807
-			player[0] = playerName
-		else:
-			health = 10
-			resistance = False
-			armour = 10
-		player[0] = playerName
+		#This bit is commented out because of a new, on-screen method for creating he character's username.
+		#playerName = str(input("What is your player's Name?\n"))
+		health = 10
+		resistance = False
+		armour = 10
+		player[0] = ''#playerName
 		player[1] = health
 		player[2] = resistance
 		player[3] = armour
 		player[4] = (0, 0, 0)#Location. Change to fit the stating location and the location system
 		playerHealth = playerHealth + str(player[1])
+		PTAGVars.level=3807
 def inBounds(bounds, pointer):
 		if pointer[0] <= bounds[2] and pointer[0] >= bounds[0] and pointer[1] <= bounds[1] and pointer[1] >= bounds[3]:
 			return(True)
@@ -133,6 +135,14 @@ pyglet.font.add_directory('../assets/fonts/')
 #Define the main window
 window = pyglet.window.Window(caption='Python Text Adventure Game - Room 1.1 - Rv1')
 #The different Levels
+#This is not quite a level to the game, but it is a level in the way that it has to be set up.
+class getUserName():
+	instructionLabel = pyglet.text.Label('Please enter your name and then hit enter', font_name='Times New Roman', font_size=10, x=window.width//2, y=(window.height//2)+20, anchor_x='center', anchor_y='center')
+	nameLabel = pyglet.text.Label('', font_name='Times New Roman', font_size=20, x=window.width//2, y=(window.width//2)-20, anchor_x='center', anchor_y='center')
+	
+	def drawNameGet():
+		getUserName.instructionLabel.draw()
+		getUserName.nameLabel.draw()
 #Room One
 class RoomOne():
 	font = PTAGVars.ButtonFont[0]
@@ -251,7 +261,6 @@ class HallOne():
 	def DrawHallOne():
 		HallOne.GoBackButtonLabel.draw()
 		HallOne.GoToIntersectionButton.draw()
-
 class HallTwo():
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
@@ -269,8 +278,7 @@ class HallTwo():
 	def DrawHallTwo():
 		HallTwo.RunLeftLabel.draw()
 		HallTwo.RunRightLabel.draw()
-		HallTwo.FightLabel.draw()
-		
+		HallTwo.FightLabel.draw()		
 class LabelsGeneral():
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
@@ -312,15 +320,54 @@ class DebugStuffs():
 	def DrawDebugStuff():
 		DebugStuffs.pointerClickLocation.draw()
 		DebugStuffs.fps.draw()
+def typedName(symbol, modifiers):
+	#This is for letters and numbers
+	keyCodes = [97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,32,48,49,50,51,52,53,54,55,56,57,58]
+	keyString = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',' ','0','1','2','3','4','5','6','7','8','9']
+	enter = 65293
+	backspace = 65288
+	if not symbol==enter:
+		if not symbol==backspace:
+			try:
+				i = keyCodes.index(symbol)
+				if modifiers==17:
+					preChar = keyString[i]
+					char = preChar.upper()
+				else:
+					char = keyString[i]
+				PTAGVars.NaMe.append(char)
+			except ValueError:
+				print('', end='')
+		if symbol==backspace:
+			try:
+				last=len(PTAGVars.NaMe)-1
+				del(PTAGVars.NaMe[last])
+			except IndexError:
+				print('', end='')
+	if symbol==enter:
+		PTAGVars.NAME=''.join(PTAGVars.NaMe)
+		PTAGVars.player[0] = PTAGVars.NAME
+		PlayerStats.playerNameLabel.text=PTAGVars.player[0]
+		PTAGVars.level=0
+	getUserName.nameLabel.text=''.join(PTAGVars.NaMe)
 @window.event
 def on_key_press(symbol, modifiers):
-	print('')
+	if PTAGVars.level==3807:
+		typedName(symbol, modifiers)
+	if not PTAGVars.level==3807:
+		if not PTAGVars.keyPressCount==100:
+			print('Nice! You pressed a button on the keyboard!')
+			PTAGVars.keyPressCount = PTAGVars.keyPressCount + 1
+			print(symbol)
+			print(modifiers)
+		else:
+			print('Stop Pressing Buttons!!!')
 @window.event
 def on_mouse_press(x, y, button, modifiers):
-	pressToStart()
 	PTAGVars.mouseCoords = (x, y)
 	Level=PTAGVars.level
-	
+	if not Level==3807:
+		pressToStart()
 	if Level==0:
 		RoomOne.listenClosely()
 		RoomOne.lookAround()
@@ -344,13 +391,14 @@ def on_mouse_press(x, y, button, modifiers):
 def on_draw():
 	level = PTAGVars.level
 	window.clear()#	Clear the display
-	#	Draw the Game Infomation Labels
-	LabelsGeneral.DrawGeneralLabels()
-	#	Draw the Player Statistics Labels
-	PlayerStats.DrawPlayerStats()
-	#	Draw the Game Debugging Labels
-	if PTAGVars.DeBuG:
-		DebugStuffs.DrawDebugStuff()
+	if not level==3807:
+		#	Draw the Game Infomation Labels
+		LabelsGeneral.DrawGeneralLabels()
+		#	Draw the Player Statistics Labels
+		PlayerStats.DrawPlayerStats()
+		#	Draw the Game Debugging Labels
+		if PTAGVars.DeBuG:
+			DebugStuffs.DrawDebugStuff()
 	
 	if level==0:
 		#	Draw The Stuff for Room One
@@ -361,6 +409,8 @@ def on_draw():
 		HallOne.DrawHallOne()
 	elif level==20:
 		HallTwo.DrawHallTwo()
+	elif level==3807:
+		getUserName.drawNameGet()
 	
 pyglet.app.run()
 sys.exit(0)
