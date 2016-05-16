@@ -49,6 +49,9 @@ class PTAGVars():
 	#Tells Whether or not to print the Debug Information to the console or the screen
 	DeBuG = True	#	True means that the debug stuff is shown and false means that it isn't.
 	
+	#Define a music player
+	playMus=pyglet.media.Player()
+	
 	#Name Creation Variables
 	NaMe = []
 	NAME = ''
@@ -79,17 +82,17 @@ class PTAGVars():
 	#Fonts
 	hemiHead = '../assets/fonts/hemi head bd it.ttf'
 	#Music
-	wizardsBattleSong = '../assets/music/Final Battle of the Dark Wizards.mp3'
-	floatingCitiesSong = '../assets/music/Floating Cities.mp3'
-	rynosThemeSong = '../assets/music/Rynos_Theme.mp3'
-	clashDefiantSong = '../assets/music/Clash Defiant.mp3'
-	edmDetectionModeSong = '../assets/music/EDM Detection Mode.mp3'
-	furiousFreakSong = '../assets/music/Furious Freak.mp3'
-	overworldSong = '../assets/music/Overworld.mp3'
-	professorUmlautSong = '../assets/music/Professor Umlaut.mp3'
-	killersSong = '../assets/music/Killers.mp3'
-	sandStormRemixSong = '../assets/music/Daude - Sandstorm Jorxelvin Napalm Remix.mp3'
-	funLOTRSong = '../assets/music/taking the hobbits to isengard.mp3'
+	wizardsBattleSong = pyglet.media.load('../assets/music/Final Battle of the Dark Wizards.ogg', streaming=False)
+	floatingCitiesSong = pyglet.media.load('../assets/music/Floating Cities.ogg', streaming=False)
+	rynosThemeSong = pyglet.media.load('../assets/music/Rynos_Theme.ogg', streaming=False)
+	clashDefiantSong = pyglet.media.load('../assets/music/Clash Defiant.ogg', streaming=False)
+	edmDetectionModeSong = pyglet.media.load('../assets/music/EDM Detection Mode.ogg', streaming=False)
+	furiousFreakSong = pyglet.media.load('../assets/music/Furious Freak.ogg', streaming=False)
+	overworldSong = pyglet.media.load('../assets/music/Overworld.ogg', streaming=False)
+	professorUmlautSong = pyglet.media.load('../assets/music/Professor Umlaut.ogg', streaming=False)
+	killersSong = pyglet.media.load('../assets/music/Killers.ogg', streaming=False)
+	sandStormRemixSong = pyglet.media.load('../assets/music/Daude - Sandstorm Jorxelvin Napalm Remix.ogg', streaming=False)
+	funLOTRSong = pyglet.media.load('../assets/music/taking the hobbits to isengard.ogg', streaming=False)
 	
 	song = [wizardsBattleSong, floatingCitiesSong, rynosThemeSong, clashDefiantSong, edmDetectionModeSong, funLOTRSong, furiousFreakSong, overworldSong, professorUmlautSong, killersSong, sandStormRemixSong]
 class newGame():
@@ -128,9 +131,21 @@ def inBounds(bounds, pointer):
 newGame.selectDLL()
 newGame.setupPlayer()
 #Play the music
+#Queue songs to be played in random order
+songInDance = 0
 lastIndex = len(PTAGVars.song)-1
-sound = pyglet.media.load(PTAGVars.song[random.randrange(0, lastIndex)])
-sound.play()
+while songInDance < 3:
+	source = PTAGVars.song[random.randrange(0, lastIndex)]
+	PTAGVars.playMus.queue(source)
+	songInDance = songInDance + 1
+#Play the Playlist
+PTAGVars.playMus.play()
+
+#Old way of playing music. Only played one song once.
+#sound = pyglet.media.load(PTAGVars.song[random.randrange(0, lastIndex)])
+#sound.play()
+
+
 #Define a folder for the custom fonts
 pyglet.font.add_directory('../assets/fonts/')
 #Define the main window
