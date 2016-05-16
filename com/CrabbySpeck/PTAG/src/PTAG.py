@@ -116,6 +116,7 @@ class newGame():
 		player[2] = resistance
 		player[3] = armour
 		player[4] = (0, 0, 0)#Location. Change to fit the stating location and the location system
+		player[5] =	1
 		playerHealth = playerHealth + str(player[1])
 		PTAGVars.level=3807
 def inBounds(bounds, pointer):
@@ -305,13 +306,15 @@ class PlayerStats():
 	playerResistanceLabel = pyglet.text.Label(PTAGVars.playerResistance, font_name=font, font_size=10, x=window.width, y=(window.height-30), anchor_x='right', anchor_y='top')
 	playerArmourLabel = pyglet.text.Label(PTAGVars.playerArmour, font_name=font, font_size=10, x=window.width, y=(window.height-45), anchor_x='right', anchor_y='top')
 	playerLocationLabel = pyglet.text.Label(PTAGVars.playerLocation, font_name=font, font_size=10, x=window.width, y=(window.height-60), anchor_x='right', anchor_y='top')
+	playerLevelLabel = pyglet.text.Label(PTAGVars.playerLevel, font_name=font, font_size=10, x=window.width, y=(window.height-75), anchor_x='right', anchor_y='top')
 	
 	def DrawPlayerStats():
 		PlayerStats.playerNameLabel.draw()
 		PlayerStats.playerHealthLabel.draw()
 		PlayerStats.playerResistanceLabel.draw()
 		PlayerStats.playerArmourLabel.draw()
-		PlayerStats.playerLocationLabel.draw()		
+		PlayerStats.playerLocationLabel.draw()
+		PlayerStats.playerLevelLabel.draw()		
 class DebugStuffs():
 	#Debug Labels
 	pointerClickLocation = pyglet.text.Label('0, 0', font_name='Arial', font_size=10, x=window.width, y=0, anchor_x='right', anchor_y='bottom')
@@ -346,6 +349,21 @@ def typedName(symbol, modifiers):
 				print('', end='')
 	if symbol==enter:
 		PTAGVars.NAME=''.join(PTAGVars.NaMe)
+		if PTAGVars.NaMe[0]=='M' and PTAGVars.NaMe[1]=='c' and PTAGVars.NaMe[2]=='D':
+			PTAGVars.player[1] = 3807
+			PTAGVars.player[3] = 3807
+			PTAGVars.player[5] = 3807
+			PlayerStats.playerHealthLabel.draw()
+			PlayerStats.playerArmourLabel.draw()
+			PlayerStats.playerLevelLabel.draw()
+		elif PTAGVars.NAME == "McD":
+			PTAGVars.player[1] = 3807
+			PTAGVars.player[3] = 3807
+			PTAGVars.player[5] = 3807
+			PlayerStats.playerHealthLabel.draw()
+			PlayerStats.playerArmourLabel.draw()
+			PlayerStats.playerLevelLabel.draw()
+			
 		PTAGVars.player[0] = PTAGVars.NAME
 		PlayerStats.playerNameLabel.text=PTAGVars.player[0]
 		PTAGVars.level=0
