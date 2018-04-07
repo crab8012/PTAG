@@ -1,50 +1,62 @@
-#Custom made modules
-import PythonGameLib as pgl	#This is where we can see a formatted list of all of the player's statistics. We import it as pgl so we dont have to keep typing 'PythonGameLib._()'
+# Custom made modules
+import PythonGameLib as pgl 	# This is where we can see a formatted list of all of the player's statistics. We import it as pgl so we dont have to keep typing 'PythonGameLib._()'
 from PythonGameLib import *
-#Built-in Libraries
-import time	#Allows us to add pauses between events.
+# Built-in Libraries
+import time 	# Allows us to add pauses between events.
 import sys
-#Game Libraries
-import pyglet	#This is the general game library
-#Extra Functions/Classes from Game Library
-from pyglet.window import key	#Allows us to have keyboard input
-from pyglet.window import mouse		#Allows us to have mouse input
-def storyNarration():
-	print('You begin awaking in a room.')
-	print('It is not your room.')
-	print('The room is stone cold.')
-	print('There are no lights.')
-	print('You have to escape.')
-def pressToStart():
-	if not PTAGVars.started:
-		LabelsGeneral.StartLabel.text=''
-		moveTitleUp()
-		PTAGVars.started = True
-		if PTAGVars.DeBuG:
-			print("DEBUG: PTAGVars.started = ", PTAGVars.started)
-		storyNarration()
+# Game Libraries
+import pyglet  # This is the general game library
+# Extra Functions/Classes from Game Library
+from pyglet.window import key  # Allows us to have keyboard input
+from pyglet.window import mouse		# Allows us to have mouse input
 
-	else:
-		PTAGVars.started = True
+
+def storyNarration():
+    print('You begin awaking in a room.')
+    print('It is not your room.')
+    print('The room is stone cold.')
+    print('There are no lights.')
+    print('You have to escape.')
+
+
+def pressToStart():
+    if not PTAGVars.started:
+        LabelsGeneral.StartLabel.text = ''
+        moveTitleUp()
+        PTAGVars.started = True
+        if PTAGVars.DeBuG:
+            print("DEBUG: PTAGVars.started = ", PTAGVars.started)
+        storyNarration()
+
+    else:
+        PTAGVars.started = True
+
+
 def LeButtonOne(x, y):
-	if x >= 197 and x <= 440 and y >= 351 and y <= 384:
-		#Basic Button Code
-		print('', end='')
+    if x >= 197 and x <= 440 and y >= 351 and y <= 384:
+        # Basic Button Code
+        print('', end='')
+
+
 def moveTitleUp():
 	GameTitle = LabelsGeneral.GameTitle
-	GameTitle.font_size=10
-	GameTitle.y=window.height
-	GameTitle.anchor_y='top'
+	GameTitle.font_size = 10
+	GameTitle.y = window.height
+	GameTitle.anchor_y = 'top'
+
+
 def endRoom():
-	#Code goes here to switch to the next level
+	# Code goes here to switch to the next level
 	print('You have escaped 1-1')
-	LabelsGeneral.storyLabel.text='You have escaped 1-1'
+	LabelsGeneral.storyLabel.text = 'You have escaped 1-1'
+
+
 class PTAGVars():
 	
-	#Tells Whether or not to print the Debug Information to the console or the screen
-	DeBuG = True	#	True means that the debug stuff is shown and false means that it isn't.
+	# Tells Whether or not to print the Debug Information to the console or the screen
+	DeBuG = True  # True means that the debug stuff is shown and false means that it isn't.
 	
-	#Global Variables
+	# Global Variables
 	playerInventory = []
 	player = ['player', 10, False, 10, (1, 1)]
 	started = False
@@ -55,38 +67,33 @@ class PTAGVars():
 	missionObjective = 'Escape The Room'
 	mouseCoords = (0, 0)
 	fs = False
-	level=0
+	level = 0
 
-	found_Stone=False
-	doorUnlocked=False
-	found_Key=False
+	found_Stone = False
+	doorUnlocked = False
+	found_Key = False
 	
 	ButtonFont = ['Times New Roman', 10]
 	stringPlayerStatisticsList = [player[0], playerHealth, playerResistance, playerArmour, playerLocation]
-	#Fonts
+	# Fonts
 	hemiHead = '../assets/fonts/hemi head bd it.ttf'
-	#Music
-	wizardsBattleSong = '../assets/music/Final Battle of the Dark Wizards.mp3'
-	floatingCitiesSong = '../assets/music/Floating Cities.mp3'
-	rynosThemeSong = '../assets/music/Rynos_Theme.mp3'
-	clashDefiantSong = '../assets/music/Clash Defiant.mp3'
-	edmDetectionModeSong = '../assets/music/EDM Detection Mode.mp3'
-	furiousFreakSong = '../assets/music/Furious Freak.mp3'
-	overworldSong = '../assets/music/Overworld.mp3'
-	professorUmlautSong = '../assets/music/Professor Umlaut.mp3'
+	# Music
+	# No music yet, because we are focusing on playability at the moment.
 	
-	song = [wizardsBattleSong, floatingCitiesSong, rynosThemeSong, clashDefiantSong, edmDetectionModeSong, furiousFreakSong, overworldSong, professorUmlautSong]
+	song = []
+
+
 class newGame():
 	def selectDLL():		
 		try:
 			pyglet.lib.load_library('avbin64')
-			pyglet.have_avbin=True
+			pyglet.have_avbin = True
 			print("Using avbin64")
 		except OSError:
 			pyglet.lib.load_library('avbin')
-			pyglet.have_avbin=True
+			pyglet.have_avbin = True
 			print('Using avbin')
-		
+
 	def setupPlayer():
 		player = PTAGVars.player
 		playerHealth = PTAGVars.playerHealth
@@ -98,21 +105,27 @@ class newGame():
 		player[1] = health
 		player[2] = resistance
 		player[3] = armour
-		player[4] = (0, 0, 0)#Location. Change to fit the stating location and the location system
+		player[4] = (0, 0, 0)  # Location. Change to fit the stating location and the location system
 		playerHealth = playerHealth + str(player[1])
+
+
 def inBounds(bounds, pointer):
 		if pointer[0] <= bounds[2] and pointer[0] >= bounds[0] and pointer[1] <= bounds[1] and pointer[1] >= bounds[3]:
 			return(True)
 		else:
 			return(False)
-#Setup the game and music stuffs
+
+
+# Setup the game and music stuffs
 newGame.selectDLL()
 newGame.setupPlayer()
-#Play the music
-sound = pyglet.media.load(PTAGVars.song[0])
-sound.play()
-#Define the main window
+# Play the music
+# sound = pyglet.media.load(PTAGVars.song[0])
+# sound.play()
+# Define the main window
 window = pyglet.window.Window(caption='Python Text Adventure Game - Room 1.1 - Rv1')
+
+
 class RoomOne():
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
@@ -289,18 +302,22 @@ class LabelsGeneral():
 	size = PTAGVars.ButtonFont[1]
 	#Game Name and Start Button Labels
 	GameTitle = pyglet.text.Label("Python Text Adventure Game", font_name=font, font_size=size, x=window.width//2, y=window.width//2, anchor_x='center', anchor_y='top', color=(255,0,0,255))
-	StartLabel = pyglet.text.Label("Click to Start", font_name=font, font_size=size, x=(window.width//2)-20, y=(window.width//2)-100, anchor_x='center', anchor_y='center')
+	PressToStartButton = pyglet.image.load('../assets/images/PressToStartButton.png')
+	StartButtonSprite = pyglet.sprite.Sprite(PressToStartButton, x=(window.width//2)-60, y=(window.width//2)-100)
+	#StartLabel = pyglet.text.Label("Click to Start", font_name=font, font_size=size, x=(window.width//2)-20, y=(window.width//2)-100, anchor_x='center', anchor_y='center')
 	
 	#General Game Information Labels
 	missionObjectiveLabel = pyglet.text.Label(PTAGVars.missionObjective, font_name='Arial Rounded MT Bold', font_size=10, x=window.width//2 ,y=0, anchor_x='center', anchor_y='bottom')
 	storyLabel = pyglet.text.Label('', font_name='Arial', font_size=10, x=window.width//2, y=window.height//2, anchor_x='center', anchor_y='center')
 	speaker = pyglet.image.load('../assets/images/Speaker.png')
+	speakerSprite = pyglet.sprite.Sprite(speaker)
 	
 	def DrawGeneralLabels():
 		LabelsGeneral.GameTitle.draw()
 		LabelsGeneral.missionObjectiveLabel.draw()
 		LabelsGeneral.storyLabel.draw()
-		LabelsGeneral.StartLabel.draw()
+		LabelsGeneral.StartButtonSprite.draw()
+
 class PlayerStats():
 	font = PTAGVars.ButtonFont[0]
 	size = PTAGVars.ButtonFont[1]
@@ -328,9 +345,12 @@ class DebugStuffs():
 		DebugStuffs.fps.draw()
 @window.event
 def on_key_press(symbol, modifiers):
-	print('')
+	print(symbol, modifiers)
+
 @window.event
 def on_mouse_press(x, y, button, modifiers):
+	print(button)
+	
 	pressToStart()
 	PTAGVars.mouseCoords = (x, y)
 	Level=PTAGVars.level
@@ -349,6 +369,7 @@ def on_mouse_press(x, y, button, modifiers):
 	loc = [str(x), str(y)]
 	pointerLoc = ','.join(loc)
 	DebugStuffs.pointerClickLocation.text=pointerLoc	
+
 @window.event
 def on_draw():
 	level = PTAGVars.level
@@ -366,5 +387,6 @@ def on_draw():
 		RoomOne.DrawRoomOne()
 	elif level==1:
 		RoomOne_ReturnOne.DrawRoomOne
+
 pyglet.app.run()
 sys.exit(0)
